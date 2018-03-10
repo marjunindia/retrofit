@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.example.arjun27.retrofit1.model.User;
 import com.example.arjun27.retrofit1.service.UserClient;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,8 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendNetworkRequest(User user) {
 
+        OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder();
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        if(BuildConfig.DEBUG){
+
+            okhttpBuilder.addInterceptor(logging);
+        }
+
+        // create retrofit instance
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create());
+                .addConverterFactory(GsonConverterFactory.create()).client(okhttpBuilder.build());
 
         Retrofit retrofit = builder.build();
 
@@ -60,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         Call<User> call=client.createAccount(user);
 
+        // execute network request
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
