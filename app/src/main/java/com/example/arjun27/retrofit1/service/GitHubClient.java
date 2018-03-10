@@ -1,4 +1,6 @@
-package com.example.arjun27.retrofit1;
+package com.example.arjun27.retrofit1.service;
+
+import com.example.arjun27.retrofit1.model.GitHubRepo;
 
 import java.util.List;
 
