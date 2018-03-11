@@ -1,22 +1,14 @@
 package com.example.arjun27.retrofit1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.example.arjun27.retrofit1.background.BackgroundService;
 import com.example.arjun27.retrofit1.model.User;
-import com.example.arjun27.retrofit1.service.UserClient;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -51,43 +43,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendNetworkRequest(User user) {
-
-        OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder();
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        if(BuildConfig.DEBUG){
-
-            okhttpBuilder.addInterceptor(logging);
-        }
-
-        // create retrofit instance
-        Retrofit.Builder builder = new Retrofit.Builder().baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create()).client(okhttpBuilder.build());
-
-        Retrofit retrofit = builder.build();
-
-        // get client & call object for the request
-        UserClient client = retrofit.create(UserClient.class);
-
-        Call<User> call=client.createAccount("arjun",user); //dynamic header
-
-        // execute network request
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Toast.makeText(MainActivity.this, ""+response.body().getId(), Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        Intent intent=new Intent(MainActivity.this, BackgroundService.class);
+        startService(intent);
     }
 
 }
