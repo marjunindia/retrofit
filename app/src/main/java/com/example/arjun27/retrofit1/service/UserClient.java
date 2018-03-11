@@ -1,9 +1,13 @@
 package com.example.arjun27.retrofit1.service;
 
-import com.example.arjun27.retrofit1.model.User;
+import java.util.List;
+import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
@@ -12,6 +16,21 @@ import retrofit2.http.POST;
 
 public interface UserClient {
 
-    @POST("user")
-    Call<User> createAccount(@Body User user);
+    @FormUrlEncoded
+    @POST("feedback/")
+    Call<ResponseBody> sendUserFeedback(
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("age") String age,
+            @Field("topics") List<String> topics
+    );
+
+    @FormUrlEncoded
+    @POST("feedback/")
+    Call<ResponseBody> sendUserFeedback(
+            @FieldMap Map<String, Object> map,
+            @Field("topics") List<String> topics
+
+    );
+
 }
