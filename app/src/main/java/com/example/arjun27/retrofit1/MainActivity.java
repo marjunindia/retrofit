@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         // get client & call object for the request
         UserClient client = retrofit.create(UserClient.class);
 
-        Call<User> call=client.createAccount(user);
+        Call<User> call=client.createAccount("arjun",user); //dynamic header
 
         // execute network request
         call.enqueue(new Callback<User>() {
