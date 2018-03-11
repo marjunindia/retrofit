@@ -10,6 +10,11 @@ import android.widget.Toast;
 import com.example.arjun27.retrofit1.model.User;
 import com.example.arjun27.retrofit1.service.UserClient;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendNetworkRequest(User user) {
+
+        OkHttpClient.Builder okhttpBuilder=new OkHttpClient.Builder();
+        okhttpBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+
+                Request request=chain.request();
+                Request.Builder newrequest=request.newBuilder().header("Authorization","secretkey");
+                return chain.proceed(newrequest.build());
+
+            }
+        });
+
 
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create());
