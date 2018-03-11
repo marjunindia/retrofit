@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.example.arjun27.retrofit1.model.User;
 import com.example.arjun27.retrofit1.service.UserClient;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,17 +59,19 @@ public class MainActivity extends AppCompatActivity {
         // get client & call object for the request
         UserClient client = retrofit.create(UserClient.class);
 
-        Call<User> call=client.createAccount(user);
+        String profilephoto="photo url"; // diff from base url
 
-        call.enqueue(new Callback<User>() {
+        Call<ResponseBody> call=client.getUSerProfilePhoto(profilephoto);
+
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Toast.makeText(MainActivity.this, ""+response.body().getId(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Toast.makeText(MainActivity.this, ""+response.body(), Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
